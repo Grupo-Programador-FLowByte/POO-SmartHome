@@ -16,25 +16,13 @@ class Automatizacion:
         self.__id_automatizacion = id_automatizacion
 
     def activar_modo(self, activar=True):
-        """
-        Activa o desactiva la automatización.
-        Por defecto la activa (estado=True).
-        """
+        """Activa o desactiva la automatización (por defecto la activa)."""
         self.estado = activar
 
     def reglas_de_automatizacion(self):
-        """
-        Devuelve una descripción de las reglas de la automatización.
-        """
+        """Devuelve una descripción de las reglas de la automatización."""
         return f"Reglas de {self.nombre}: {self.funcionalidad}"
-
-    # Métodos para compatibilidad con los tests
-    def get_id_automatizacion(self):
-        return self.id_automatizacion
-
-    def set_id_automatizacion(self, nuevo_id):
-        self.id_automatizacion = nuevo_id
-
+    
 """
 Tareas de Valentino
 

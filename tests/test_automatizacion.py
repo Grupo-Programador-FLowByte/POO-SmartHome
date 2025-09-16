@@ -3,7 +3,7 @@ from automatizacion import Automatizacion
 
 def test_creacion_automatizacion():
     auto = Automatizacion(1, "Luces", "Encender luces al anochecer")
-    assert auto.get_id_automatizacion() == 1
+    assert auto.id_automatizacion == 1
     assert auto.nombre == "Luces"
     assert auto.funcionalidad == "Encender luces al anochecer"
     assert auto.estado is False
@@ -26,5 +26,5 @@ def test_reglas_de_automatizacion():
 
 def test_setter_getter_id():
     auto = Automatizacion(5, "Alarma", "Activar sirena en intrusión")
-    auto.set_id_automatizacion(99)
-    assert auto.get_id_automatizacion() == 99
+    auto.id_automatizacion = 99
+    assert auto.id_automatizacion == 99
