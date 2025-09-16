@@ -42,10 +42,9 @@ class Usuario:
      self.rol = nuevo_rol
      print(f"Rol actualizado a: {'Administrador' if nuevo_rol else 'Estandar'}")
 
-   def obtener_usuario_por_nombre(self, nombre_buscado):
-        for usuario in usuarios_registrados:
-            if usuario.nombre == nombre_buscado:
-                return usuario
-        return None
-
-
+   @staticmethod
+   def obtener_usuario_por_nombre(nombre_buscado):
+      for usuario in usuarios_registrados:
+          if usuario.nombre == nombre_buscado:
+              return usuario
+      return None
