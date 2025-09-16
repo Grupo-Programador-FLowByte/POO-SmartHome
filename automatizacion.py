@@ -1,3 +1,32 @@
+class Automatizacion:
+    def __init__(self, id_automatizacion, nombre, funcionalidad, estado=False):
+        
+        self._id_automatizacion = id_automatizacion  
+        
+        self.nombre = nombre
+        self.funcionalidad = funcionalidad
+        self.estado = estado
+
+    def activar_modo(self, activar=True):
+        """
+        Activa o desactiva la automatización.
+        Por defecto la activa (estado=True).
+        """
+        self.estado = activar
+
+    def reglas_de_automatizacion(self):
+        """
+        Devuelve una descripción de las reglas de la automatización.
+        """
+        return f"Reglas de {self.nombre}: {self.funcionalidad}"
+
+    def get_id_automatizacion(self):
+        return self._id_automatizacion
+
+    def set_id_automatizacion(self, nuevo_id):
+        self._id_automatizacion = nuevo_id
+
+
 """
 Tareas de Valentino
 
