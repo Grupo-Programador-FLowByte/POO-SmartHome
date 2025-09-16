@@ -1,11 +1,19 @@
 class Automatizacion:
     def __init__(self, id_automatizacion, nombre, funcionalidad, estado=False):
-        
-        self._id_automatizacion = id_automatizacion  
-        
+        self.__id_automatizacion = id_automatizacion  
         self.nombre = nombre
         self.funcionalidad = funcionalidad
         self.estado = estado
+
+    @property
+    def id_automatizacion(self):
+        """Getter para id_automatizacion"""
+        return self.__id_automatizacion
+
+    @id_automatizacion.setter
+    def id_automatizacion(self, id_automatizacion):
+        """Setter para id_automatizacion"""
+        self.__id_automatizacion = id_automatizacion
 
     def activar_modo(self, activar=True):
         """
@@ -20,12 +28,12 @@ class Automatizacion:
         """
         return f"Reglas de {self.nombre}: {self.funcionalidad}"
 
+    # Métodos para compatibilidad con los tests
     def get_id_automatizacion(self):
-        return self._id_automatizacion
+        return self.id_automatizacion
 
     def set_id_automatizacion(self, nuevo_id):
-        self._id_automatizacion = nuevo_id
-
+        self.id_automatizacion = nuevo_id
 
 """
 Tareas de Valentino
