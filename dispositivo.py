@@ -1,22 +1,36 @@
-"""
-Tareas de Sergio
+from usuario import Usuario
 
-Clase Dispositivo
+class Dispositivo:
+   def __init__(self, id_dispositivo, nombre, tipo, estado,usuario: Usuario):
+        self.__id_dispositivo = id_dispositivo
+        self.nombre = nombre
+        self.tipo = tipo
+        self.estado = estado
+        self.usuario=usuario
 
-1. Crear la clase Dispositivo con los siguientes atributos:
-   - id_dispositivo
-   - nombre
-   - tipo
-   - estado
+   @property
+   def id_dispositivo(self):
+      return self.__id_dispositivo
+   
+   @id_dispositivo.setter
+   def id_dispositivo(self,id_dispositivo):
+      self.__id_dispositivo=id_dispositivo
 
-2. Implementar métodos:
-   - agregar_dispositivo()
-   - listar_dispositivo()
-   - buscar_dispositivo()
-   - eliminar_dispositivo()
-   - getter
+   def agregar_dispositivo(self):
+       pass
+   
+   def listar_dispositivo(self):
+       pass
+   
+   def buscar_dispositivo(self):
+       pass
+   
+   def eliminar_dispositivo(self):
+       pass
 
-3. Crear los tests en tests/test_dispositivo.py siguiendo TDD:
-   - Primero escribir tests que fallen.
-   - Luego implementar métodos para pasar los tests.
-"""
+   def __str__(self):
+     return (f"Dispositivo:\n  {self.nombre} ({self.id_dispositivo})\n"
+            f"  Tipo: {self.tipo}\n"
+            f"  Estado: {self.estado}\n"
+            f"  Usuario: {self.usuario.nombre}\n"
+        )
