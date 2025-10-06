@@ -1,11 +1,14 @@
-from dispositivos import listar_dispositivos, eliminar_dispositivos, agregar_dispositivo, buscar_dispositivos
-from automatizacion import activar_modo_ahorro, reglas_de_automatizacion
-from lista_dispositivos import *
-from usuarios import cambiar_rol_usuario, registrar_usuario, iniciar_sesion, obtener_usuario_por_nombre
-from utils import imprimir_valores
-from claves import claves_usuarios
-import json
-import os
+from dominio.usuario import Usuario
+# from dominio.dispositivo import Dispositivo
+# from dominio.automatizacion import Automatizacion
+
+from dao.usuario_dao import UsuarioDAO
+# from dao.dispositivo_dao import DispositivoDAO
+# from dao.automatizacion_dao import AutomatizacionDAO
+
+from utils.utilidades import mostrar_atributos
+
+# ------------------ Menús ------------------
 
 
 def mostrar_menu_principal():
@@ -46,159 +49,158 @@ def mostrar_menu_automatizaciones():
     print("2. Ver reglas de automatización")
     print("3. Volver al menú")
 
+# ------------------ Gestión de Dispositivos ------------------
+
 
 def gestionar_dispositivos():
     while True:
         mostrar_menu_dispositivos()
-        opcion = input("Seleccione una opcion: ")
+        opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
-            print("Funcion agregar dispositivos")
-            agregar_dispositivo(dispositivos)
+            nombre = input("Nombre del dispositivo: ")
+            tipo = input("Tipo: ")
+            estado = input("Estado (True/False): ").lower() == "true"
+            usuario_id = int(input("ID de usuario propietario: "))
+            DispositivoDAO.insertar(nombre, tipo, estado, usuario_id)
+            print("Dispositivo agregado.")
         elif opcion == "2":
-            print("Funcion listar dispositivos\n")
-            listar_dispositivos(dispositivos)
+            dispositivos = DispositivoDAO.obtener_todos()
+            for d in dispositivos:
+                mostrar_atributos(d)
         elif opcion == "3":
-            print("Funcion buscar dispositivo")
-            buscar_dispositivos(dispositivos)
-        elif opcion == "4":
-            print("Funcion eliminar dispositivo")
-            eliminar = input("¿Desea eliminar un dispositivo? (SI/NO): ")
-            if eliminar.lower() == "si":
-                try:
-                    id_a_eliminar = int(
-                        input("Ingrese el ID del dispositivo a eliminar: "))
-                    resultado = eliminar_dispositivos(
-                        dispositivos, eliminar, id_a_eliminar)
-                    if resultado:
-                        print("Dispositivo eliminado correctamente.")
-                    else:
-                        print("No se encontró el dispositivo.")
-                except:
-                    print("ERROR, el dato a ingresar debe ser numérico")
+            id_disp = int(input("ID del dispositivo a buscar: "))
+            disp = DispositivoDAO.obtener_por_id(id_disp)
+            if disp:
+                mostrar_atributos(disp)
             else:
-                print("No se elimina ningún dispositivo.")
+                print("Dispositivo no encontrado.")
+        elif opcion == "4":
+            id_disp = int(input("ID del dispositivo a eliminar: "))
+            if DispositivoDAO.eliminar(id_disp):
+                print("Dispositivo eliminado.")
+            else:
+                print("No se encontró el dispositivo.")
         elif opcion == "5":
-            gestion_administrador()
             break
         else:
-            print("Opcion inorrecta")
+            print("Opción incorrecta.")
+
+# ------------------ Gestión de Automatizaciones ------------------
 
 
 def gestionar_automatizacion():
     while True:
         mostrar_menu_automatizaciones()
-        opcion = input("Seleccione una opcion: ")
+        opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
-            print("Funcion modo ahorro de energia")
-            activar_modo_ahorro(dispositivos)
-
+            id_auto = int(input("ID de la automatización a activar: "))
+            AutomatizacionDAO.activar_modo(id_auto)
+            print("Modo activado/desactivado según estado actual.")
         elif opcion == "2":
-            print("Reglas de automatización")
-            reglas_de_automatizacion(dispositivos)
-
+            autos = AutomatizacionDAO.obtener_todos()
+            for a in autos:
+                mostrar_atributos(a)
         elif opcion == "3":
-            gestion_administrador()
+            break
         else:
-            print("Opcion inorrecta")
+            print("Opción incorrecta.")
+
+# ------------------ Gestión Usuarios ------------------
 
 
 def gestion_administrador():
     while True:
         mostrar_menu_admin()
-        opcion = input("Seleccione una opcion: ")
+        opcion = input("Seleccione una opción: ")
+
         if opcion == "1":
             gestionar_dispositivos()
         elif opcion == "2":
             gestionar_automatizacion()
         elif opcion == "3":
+            usuarios = UsuarioDAO.obtener_todos()
+            for u in usuarios:
+                mostrar_atributos(u)
+
             try:
-                with open("usuarios.json", "r") as f:
-                    usuarios = json.load(f)
-                print("\n--- LISTA DE USUARIOS ---")
-                for i, u in enumerate(usuarios):
-                    print(f"{i+1}. {u['usuario']} ({u['rol']})")
-                num = input(
-                    "Ingrese el número de usuario para cambiar el rol: ")
-                if num.isdigit():
-                    resultado = cambiar_rol_usuario(int(num))
-                    if resultado:
-                        print("Rol cambiado correctamente.")
-                    else:
-                        print("Opción inválida.")
+                id_usuario = int(
+                    input("Ingrese ID del usuario para cambiar rol: "))
+                nuevo_rol = input("Nuevo rol (admin/estandar): ").lower()
+
+                if nuevo_rol not in ["admin", "estandar"]:
+                    print(
+                        "Error: el rol debe ser 'admin' o 'estandar'. No se realizó ningún cambio.")
+                    continue
+
+                if UsuarioDAO.actualizar_rol(id_usuario, nuevo_rol):
+                    print("Rol actualizado correctamente.")
                 else:
-                    print("Opción inválida.")
-            except Exception as e:
-                print("Error al acceder a los usuarios:", e)
+                    print("No se encontró el usuario con ese ID.")
+
+            except ValueError:
+                print("Error: el ID debe ser un número.")
         elif opcion == "4":
-            print("Se cerro sesión")
-            menu()
+            break
         else:
-            print("Opcion inorrecta")
+            print("Opción incorrecta.")
 
 
-def gestion_estandar(usuario):
+def gestion_estandar(usuario_obj):
     while True:
         mostrar_menu_estandar()
-        opcion = input("Seleccione una opcion: ")
+        opcion = input("Seleccione una opción: ")
+
         if opcion == "1":
-            datos_usuario = obtener_usuario_por_nombre(
-                usuario, 'usuario', None)
-            print("\n--- DATOS PERSONALES ---")
-            imprimir_valores(datos_usuario, claves_usuarios)
+            mostrar_atributos(usuario_obj)
         elif opcion == "2":
-            activar_modo_ahorro(dispositivos)
+            print("Activando modo ahorro de energía para tus dispositivos...")
+            # Aquí podés agregar lógica para activar modo ahorro
         elif opcion == "3":
-            listar_dispositivos(dispositivos)
+            dispositivos = DispositivoDAO.obtener_por_usuario(
+                usuario_obj.get_id_usuario())
+            for d in dispositivos:
+                mostrar_atributos(d)
         elif opcion == "4":
-            print("Se cerro sesión")
-            menu()
+            break
         else:
-            print("Opcion inorrecta")
+            print("Opción incorrecta.")
+
+# ------------------ Menú Principal ------------------
 
 
 def menu():
     while True:
         mostrar_menu_principal()
-        opcion = input("Seleccione una opcion: ")
+        opcion = input("Seleccione una opción: ")
+
         if opcion == "1":
-            print("=== REGISTRO DE USUARIO ===")
-
-            archivo = "usuarios.json"
-            usuarios = json.load(
-                open(archivo)) if os.path.exists(archivo) else []
-
             nombre = input("Nombre completo: ")
-            usuario = input("Nombre de usuario: ")
+            usuario = input("Usuario: ")
             clave = input("Contraseña: ")
-
-            if not usuarios:
-                rol = "admin"
-                print("Primer usuario → asignado como ADMIN.")
-            else:
-                rol = "admin" if input(
-                    "¿Rol admin? (s/n): ").lower() == "s" else "estandar"
-
-            registrar_usuario(nombre, usuario, clave, rol)
-            print(f"Usuario '{usuario}' registrado como {rol.upper()}.")
+            rol = "admin" if input(
+                "Rol admin? (s/n): ").lower() == "s" else "estandar"
+            id_usuario = UsuarioDAO.insertar(nombre, usuario, clave, rol)
+            print(f"Usuario '{usuario}' registrado con ID {id_usuario}.")
         elif opcion == "2":
-            usuario = input("Nombre de usuario: ")
+            usuario = input("Usuario: ")
             clave = input("Contraseña: ")
-            sesion = iniciar_sesion(usuario, clave)
-            if sesion:
-                print(
-                    f"Bienvenido, {sesion['nombre']} ({sesion['rol'].upper()})")
-                if sesion["rol"] == "admin":
+            usuario_obj = UsuarioDAO.iniciar_sesion(usuario, clave)
+            if usuario_obj:
+                print(f"Bienvenido {usuario_obj.nombre} ({usuario_obj.rol})")
+                if usuario_obj.rol == "admin":
                     gestion_administrador()
                 else:
-                    gestion_estandar(usuario)
+                    gestion_estandar(usuario_obj)
             else:
                 print("Usuario o contraseña incorrectos.")
         elif opcion == "3":
             break
         else:
-            print("Opcion incorrecta")
+            print("Opción incorrecta.")
+
+# ------------------ Inicio ------------------
 
 
 if __name__ == "__main__":
