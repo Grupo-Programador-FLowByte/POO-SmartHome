@@ -4,7 +4,7 @@ from dominio.usuario import Usuario
 
 from dao.usuario_dao import UsuarioDAO
 # from dao.dispositivo_dao import DispositivoDAO
-# from dao.automatizacion_dao import AutomatizacionDAO
+from dao.automatizacion_dao import AutomatizacionDAO
 
 from utils.utilidades import mostrar_atributos
 
