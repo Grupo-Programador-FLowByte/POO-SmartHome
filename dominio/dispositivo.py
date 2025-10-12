@@ -1,4 +1,5 @@
-from usuario import Usuario
+from dominio.usuario import Usuario
+from dao.dispositivo_dao import DispositivoDAO
 
 class Dispositivo:
    def __init__(self, id_dispositivo, nombre, tipo, estado,usuario: Usuario):
@@ -6,7 +7,7 @@ class Dispositivo:
         self.nombre = nombre
         self.tipo = tipo
         self.estado = estado
-        self.usuario=usuario
+        self.usuario = usuario
 
    @property
    def id_dispositivo(self):
@@ -17,16 +18,33 @@ class Dispositivo:
       self.__id_dispositivo=id_dispositivo
 
    def agregar_dispositivo(self):
-       pass
+        
+        if not isinstance(self.usuario, Usuario):
+            print("Error: el usuario debe ser un objeto de la clase Usuario.")
+            return None
+
+        if not self.nombre or not self.tipo:
+            print("Error: el nombre y el tipo no pueden estar vacíos.")
+            return None
+
+        if not isinstance(self.estado, bool):
+            print("Error: el estado debe ser booleano.")
+            return None
+
+        return DispositivoDAO.insertar(self.nombre, self.tipo, self.estado, self.usuario)
    
    def listar_dispositivo(self):
-       pass
+        return DispositivoDAO.obtener_todos()
    
    def buscar_dispositivo(self):
-       pass
-   
+       return DispositivoDAO.obtener_por_id(self.id_dispositivo)
+
    def eliminar_dispositivo(self):
-       pass
+        if not self.id_dispositivo:
+            print("Error: el dispositivo no tiene un ID válido.")
+            return False
+
+        return DispositivoDAO.eliminar(self.id_dispositivo)
 
    def __str__(self):
      return (f"Dispositivo:\n  {self.nombre} ({self.id_dispositivo})\n"
