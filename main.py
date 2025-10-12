@@ -1,10 +1,10 @@
 from dominio.usuario import Usuario
-# from dominio.dispositivo import Dispositivo
-# from dominio.automatizacion import Automatizacion
+#from dominio.dispositivo import Dispositivo
+from dominio.automatizacion import Automatizacion
 
 from dao.usuario_dao import UsuarioDAO
-# from dao.dispositivo_dao import DispositivoDAO
-# from dao.automatizacion_dao import AutomatizacionDAO
+#from dao.dispositivo_dao import DispositivoDAO
+from dao.automatizacion_dao import AutomatizacionDAO
 
 from utils.utilidades import mostrar_atributos
 
@@ -95,15 +95,34 @@ def gestionar_automatizacion():
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
-            id_auto = int(input("ID de la automatización a activar: "))
-            AutomatizacionDAO.activar_modo(id_auto)
-            print("Modo activado/desactivado según estado actual.")
+            # Activar o desactivar una automatización existente
+            id_auto = int(
+                input("ID de la automatización a activar/desactivar: "))
+            if AutomatizacionDAO.activar_modo(id_auto):
+                print("Modo activado/desactivado según estado actual.")
+            else:
+                print("No se encontró la automatización con ese ID.")
+
         elif opcion == "2":
+            # Listar todas las automatizaciones
             autos = AutomatizacionDAO.obtener_todos()
             for a in autos:
                 mostrar_atributos(a)
+
         elif opcion == "3":
+            # Agregar nueva automatización
+            nombre = input("Nombre de la automatización: ")
+            funcionalidad = input("Funcionalidad: ")
+            estado = input("Estado inicial (True/False): ").lower() == "true"
+            nueva_auto = AutomatizacionDAO.insertar(
+                nombre, funcionalidad, estado)
+            print("Automatización agregada:")
+            mostrar_atributos(nueva_auto)
+
+        elif opcion == "4":
+            # Volver al menú anterior
             break
+
         else:
             print("Opción incorrecta.")
 

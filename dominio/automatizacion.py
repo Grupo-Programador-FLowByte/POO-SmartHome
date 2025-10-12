@@ -1,9 +1,9 @@
 class Automatizacion:
     def __init__(self, id_automatizacion, nombre, funcionalidad, estado=False):
-        self.__id_automatizacion = id_automatizacion  
+        self.__id_automatizacion = id_automatizacion
         self.nombre = nombre
         self.funcionalidad = funcionalidad
-        self.estado = estado
+        self.estado = estado  # False = Inactivo, True = Activo
 
     @property
     def id_automatizacion(self):
@@ -15,31 +15,21 @@ class Automatizacion:
         """Setter para id_automatizacion"""
         self.__id_automatizacion = id_automatizacion
 
-    def activar_modo(self, activar=True):
-        """Activa o desactiva la automatización (por defecto la activa)."""
-        self.estado = activar
+    def activar_modo(self):
+        """
+        Cambia el estado de la automatización.
+        Se usa junto con el DAO para persistir en base de datos.
+        """
+        self.estado = not self.estado
 
     def reglas_de_automatizacion(self):
         """Devuelve una descripción de las reglas de la automatización."""
         return f"Reglas de {self.nombre}: {self.funcionalidad}"
-    
-"""
-Tareas de Valentino
 
-Clase Automatizacion
+    def __str__(self):
+        return (f"Automatizacion:\n  {self.nombre} ({self.id_automatizacion})\n"
+                f"  Funcionalidad: {self.funcionalidad}\n"
+                f"  Estado: {'Activo' if self.estado else 'Inactivo'}\n")
 
-1. Crear la clase Automatizacion con los siguientes atributos:
-   - id_automatizacion
-   - nombre
-   - funcionalidad
-   - estado
 
-2. Implementar métodos:
-   - activar_modo()
-   - reglas_de_automatizacion()
-   - getter
 
-3. Crear los tests en tests/test_automatizacion.py siguiendo TDD:
-   - Primero escribir tests que fallen.
-   - Luego implementar métodos para pasar los tests.
-"""
