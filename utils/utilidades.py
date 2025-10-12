@@ -30,3 +30,18 @@ def mostrar_dispositivos(dispositivos):
         print(f"Estado : {'Encendido' if d.estado else 'Apagado'}")
         print("-" * 30)  # separador
     print()  # línea vacía al final
+
+
+def mostrar_automatizaciones(automatizaciones):
+    if not automatizaciones:
+        print("No hay automatizaciones para mostrar.\n")
+        return
+
+    print("\n--- Automatizaciones Registradas ---\n")
+    for a in automatizaciones:
+        print(f"ID           : {a.id_automatizacion}")
+        print(f"Nombre       : {a.nombre}")
+        print(f"Funcionalidad: {a.funcionalidad}")
+        print(f"Estado       : {'Activo' if a.estado else 'Inactivo'}")
+        print("-" * 40)
+    print()

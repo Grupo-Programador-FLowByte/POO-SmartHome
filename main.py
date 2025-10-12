@@ -6,7 +6,7 @@ from dao.usuario_dao import UsuarioDAO
 from dao.dispositivo_dao import DispositivoDAO
 from dao.automatizacion_dao import AutomatizacionDAO
 
-from utils.utilidades import mostrar_atributos, mostrar_dispositivos
+from utils.utilidades import mostrar_atributos, mostrar_dispositivos, mostrar_automatizaciones
 
 # ------------------ Menús ------------------
 
@@ -44,10 +44,12 @@ def mostrar_menu_dispositivos():
 
 
 def mostrar_menu_automatizaciones():
-    print("\n--- AUTOMATIZACIONES DISPONIBLES ---")
-    print("1. Activar modo ahorro de energía")
-    print("2. Ver reglas de automatización")
-    print("3. Volver al menú")
+    print("\n--- MENÚ DE AUTOMATIZACIONES ---")
+    print("1. Activar / Desactivar un modo de automatización")
+    print("2. Ver todas las automatizaciones")
+    print("3. Agregar nueva automatización")
+    print("4. Volver al menú anterior")
+
 
 # ------------------ Gestión de Dispositivos ------------------
 
@@ -98,15 +100,17 @@ def gestionar_automatizacion():
             id_auto = int(
                 input("ID de la automatización a activar/desactivar: "))
             if AutomatizacionDAO.activar_modo(id_auto):
-                print("Modo activado/desactivado según estado actual.")
+                print("Modo activado/desactivado según estado actual.\n")
+                # Mostrar la lista completa después de cambiar el estado
+                autos = AutomatizacionDAO.obtener_todos()
+                mostrar_automatizaciones(autos)
             else:
-                print("No se encontró la automatización con ese ID.")
+                print("No se encontró la automatización con ese ID.\n")
 
         elif opcion == "2":
             # Listar todas las automatizaciones
             autos = AutomatizacionDAO.obtener_todos()
-            for a in autos:
-                mostrar_atributos(a)
+            mostrar_automatizaciones(autos)
 
         elif opcion == "3":
             # Agregar nueva automatización
@@ -116,14 +120,16 @@ def gestionar_automatizacion():
             nueva_auto = AutomatizacionDAO.insertar(
                 nombre, funcionalidad, estado)
             print("Automatización agregada:")
-            mostrar_atributos(nueva_auto)
+            mostrar_automatizaciones([nueva_auto])
 
         elif opcion == "4":
-            # Volver al menú anterior
             break
 
         else:
-            print("Opción incorrecta.")
+            print("Opción incorrecta.\n")
+
+
+
 
 # ------------------ Gestión Usuarios ------------------
 
