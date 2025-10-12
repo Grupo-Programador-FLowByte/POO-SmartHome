@@ -1,43 +1,95 @@
-from conn.conexion import obtener_conexion
+from conn.conexion import obtener_conexion, cerrar_conexion
 from dominio.dispositivo import Dispositivo
-from dominio.usuario import Usuario
-# Para obtener el objeto Usuario si es necesario
-from dao.usuario_dao import UsuarioDAO
 
 
 class DispositivoDAO:
 
     @staticmethod
-    def insertar(nombre: str, tipo: str, estado: bool, usuario: Usuario) -> Dispositivo:
-        """
-        Inserta un nuevo dispositivo en la base de datos y devuelve el objeto Dispositivo creado.
-        """
-        pass
+    def insertar(nombre, tipo, estado):
+        conexion = obtener_conexion()
+        if conexion is None:
+            return None
+
+        try:
+            cursor = conexion.cursor()
+            query = """
+                INSERT INTO dispositivo (nombre, tipo, estado)
+                VALUES (%s, %s, %s)
+            """
+            cursor.execute(query, (nombre, tipo, estado))
+            conexion.commit()
+            id_generado = cursor.lastrowid
+            return Dispositivo(id_generado, nombre, tipo, estado)
+        except Exception as e:
+            print("Error al insertar dispositivo:", e)
+            return None
+        finally:
+            cerrar_conexion(conexion)
 
     @staticmethod
-    def obtener_todos() -> list[Dispositivo]:
-        """
-        Devuelve una lista con todos los dispositivos de la base de datos.
-        """
-        pass
+    def obtener_todos():
+        conexion = obtener_conexion()
+        dispositivos = []
+        if conexion is None:
+            return dispositivos
+
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM dispositivo")
+            resultados = cursor.fetchall()
+            for fila in resultados:
+                dispositivos.append(Dispositivo(
+                    fila['id_dispositivo'],
+                    fila['nombre'],
+                    fila['tipo'],
+                    fila['estado']
+                ))
+            return dispositivos
+        except Exception as e:
+            print("Error al obtener dispositivos:", e)
+            return dispositivos
+        finally:
+            cerrar_conexion(conexion)
 
     @staticmethod
-    def obtener_por_id(id_dispositivo: int) -> Dispositivo | None:
-        """
-        Devuelve un dispositivo según su ID, o None si no existe.
-        """
-        pass
+    def obtener_por_id(id_dispositivo):
+        conexion = obtener_conexion()
+        if conexion is None:
+            return None
+
+        try:
+            cursor = conexion.cursor(dictionary=True)
+            cursor.execute(
+                "SELECT * FROM dispositivo WHERE id_dispositivo = %s", (id_dispositivo,))
+            fila = cursor.fetchone()
+            if fila:
+                return Dispositivo(
+                    fila['id_dispositivo'],
+                    fila['nombre'],
+                    fila['tipo'],
+                    fila['estado']
+                )
+            return None
+        except Exception as e:
+            print("Error al obtener dispositivo por ID:", e)
+            return None
+        finally:
+            cerrar_conexion(conexion)
 
     @staticmethod
-    def obtener_por_usuario(id_usuario: int) -> list[Dispositivo]:
-        """
-        Devuelve todos los dispositivos de un usuario específico.
-        """
-        pass
+    def eliminar(id_dispositivo):
+        conexion = obtener_conexion()
+        if conexion is None:
+            return False
 
-    @staticmethod
-    def eliminar(id_dispositivo: int) -> bool:
-        """
-        Elimina un dispositivo según su ID. Devuelve True si se eliminó.
-        """
-        pass
+        try:
+            cursor = conexion.cursor()
+            cursor.execute(
+                "DELETE FROM dispositivo WHERE id_dispositivo = %s", (id_dispositivo,))
+            conexion.commit()
+            return cursor.rowcount > 0
+        except Exception as e:
+            print("Error al eliminar dispositivo:", e)
+            return False
+        finally:
+            cerrar_conexion(conexion)

@@ -1,12 +1,12 @@
 from dominio.usuario import Usuario
-#from dominio.dispositivo import Dispositivo
+from dominio.dispositivo import Dispositivo
 from dominio.automatizacion import Automatizacion
 
 from dao.usuario_dao import UsuarioDAO
-#from dao.dispositivo_dao import DispositivoDAO
+from dao.dispositivo_dao import DispositivoDAO
 from dao.automatizacion_dao import AutomatizacionDAO
 
-from utils.utilidades import mostrar_atributos
+from utils.utilidades import mostrar_atributos, mostrar_dispositivos
 
 # ------------------ Menús ------------------
 
@@ -61,18 +61,16 @@ def gestionar_dispositivos():
             nombre = input("Nombre del dispositivo: ")
             tipo = input("Tipo: ")
             estado = input("Estado (True/False): ").lower() == "true"
-            usuario_id = int(input("ID de usuario propietario: "))
-            DispositivoDAO.insertar(nombre, tipo, estado, usuario_id)
+            DispositivoDAO.insertar(nombre, tipo, estado)
             print("Dispositivo agregado.")
         elif opcion == "2":
             dispositivos = DispositivoDAO.obtener_todos()
-            for d in dispositivos:
-                mostrar_atributos(d)
+            mostrar_dispositivos(dispositivos)
         elif opcion == "3":
             id_disp = int(input("ID del dispositivo a buscar: "))
             disp = DispositivoDAO.obtener_por_id(id_disp)
             if disp:
-                mostrar_atributos(disp)
+                mostrar_dispositivos([disp])
             else:
                 print("Dispositivo no encontrado.")
         elif opcion == "4":
@@ -85,6 +83,7 @@ def gestionar_dispositivos():
             break
         else:
             print("Opción incorrecta.")
+
 
 # ------------------ Gestión de Automatizaciones ------------------
 

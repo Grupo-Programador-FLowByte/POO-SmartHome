@@ -11,3 +11,22 @@ def mostrar_atributos(objeto, claves=None):
     for k, v in items:
         if not claves or k in claves:
             print(f"{k}: {v}")
+# utils/utilidades.py
+
+
+def mostrar_dispositivos(dispositivos):
+    """
+    Muestra los dispositivos de forma clara y visual en consola.
+    """
+    if not dispositivos:
+        print("No hay dispositivos para mostrar.\n")
+        return
+
+    print("\n--- Dispositivos Registrados ---\n")
+    for d in dispositivos:
+        print(f"ID     : {d.id_dispositivo}")
+        print(f"Nombre : {d.nombre}")
+        print(f"Tipo   : {d.tipo}")
+        print(f"Estado : {'Encendido' if d.estado else 'Apagado'}")
+        print("-" * 30)  # separador
+    print()  # línea vacía al final
