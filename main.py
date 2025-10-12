@@ -1,9 +1,9 @@
 from dominio.usuario import Usuario
-#from dominio.dispositivo import Dispositivo
+from dominio.dispositivo import Dispositivo
 from dominio.automatizacion import Automatizacion
 
 from dao.usuario_dao import UsuarioDAO
-#from dao.dispositivo_dao import DispositivoDAO
+from dao.dispositivo_dao import DispositivoDAO
 from dao.automatizacion_dao import AutomatizacionDAO
 
 from utils.utilidades import mostrar_atributos
