@@ -1,22 +1,25 @@
+<<<<<<< HEAD
 from dominio.usuario import Usuario
 from dao.dispositivo_dao import DispositivoDAO
 
+=======
+>>>>>>> lucas
 class Dispositivo:
-   def __init__(self, id_dispositivo, nombre, tipo, estado,usuario: Usuario):
+    def __init__(self, id_dispositivo, nombre, tipo, estado):
         self.__id_dispositivo = id_dispositivo
         self.nombre = nombre
         self.tipo = tipo
         self.estado = estado
+<<<<<<< HEAD
         self.usuario = usuario
+=======
+>>>>>>> lucas
 
-   @property
-   def id_dispositivo(self):
-      return self.__id_dispositivo
-   
-   @id_dispositivo.setter
-   def id_dispositivo(self,id_dispositivo):
-      self.__id_dispositivo=id_dispositivo
+    @property
+    def id_dispositivo(self):
+        return self.__id_dispositivo
 
+<<<<<<< HEAD
    def agregar_dispositivo(self):
         
         if not isinstance(self.usuario, Usuario):
@@ -82,3 +85,7 @@ class Dispositivo:
     #    - usuario debe ser objeto Usuario.
     #    - estado debe ser booleano.
     #    - nombre y tipo no vacíos.
+=======
+    def __str__(self):
+        return f"Dispositivo(ID: {self.id_dispositivo}, Nombre: {self.nombre}, Tipo: {self.tipo}, Estado: {self.estado})"
+>>>>>>> lucas
