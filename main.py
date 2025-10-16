@@ -1,12 +1,16 @@
 from dominio.usuario import Usuario
-# from dominio.dispositivo import Dispositivo
-# from dominio.automatizacion import Automatizacion
+from dominio.dispositivo import Dispositivo
+from dominio.automatizacion import Automatizacion
 
 from dao.usuario_dao import UsuarioDAO
+<<<<<<< HEAD
 # from dao.dispositivo_dao import DispositivoDAO
+=======
+from dao.dispositivo_dao import DispositivoDAO
+>>>>>>> main
 from dao.automatizacion_dao import AutomatizacionDAO
 
-from utils.utilidades import mostrar_atributos
+from utils.utilidades import mostrar_atributos, mostrar_dispositivos, mostrar_automatizaciones
 
 # ------------------ Menús ------------------
 
@@ -44,10 +48,12 @@ def mostrar_menu_dispositivos():
 
 
 def mostrar_menu_automatizaciones():
-    print("\n--- AUTOMATIZACIONES DISPONIBLES ---")
-    print("1. Activar modo ahorro de energía")
-    print("2. Ver reglas de automatización")
-    print("3. Volver al menú")
+    print("\n--- MENÚ DE AUTOMATIZACIONES ---")
+    print("1. Activar / Desactivar un modo de automatización")
+    print("2. Ver todas las automatizaciones")
+    print("3. Agregar nueva automatización")
+    print("4. Volver al menú anterior")
+
 
 # ------------------ Gestión de Dispositivos ------------------
 
@@ -61,18 +67,16 @@ def gestionar_dispositivos():
             nombre = input("Nombre del dispositivo: ")
             tipo = input("Tipo: ")
             estado = input("Estado (True/False): ").lower() == "true"
-            usuario_id = int(input("ID de usuario propietario: "))
-            DispositivoDAO.insertar(nombre, tipo, estado, usuario_id)
+            DispositivoDAO.insertar(nombre, tipo, estado)
             print("Dispositivo agregado.")
         elif opcion == "2":
             dispositivos = DispositivoDAO.obtener_todos()
-            for d in dispositivos:
-                mostrar_atributos(d)
+            mostrar_dispositivos(dispositivos)
         elif opcion == "3":
             id_disp = int(input("ID del dispositivo a buscar: "))
             disp = DispositivoDAO.obtener_por_id(id_disp)
             if disp:
-                mostrar_atributos(disp)
+                mostrar_dispositivos([disp])
             else:
                 print("Dispositivo no encontrado.")
         elif opcion == "4":
@@ -86,6 +90,7 @@ def gestionar_dispositivos():
         else:
             print("Opción incorrecta.")
 
+
 # ------------------ Gestión de Automatizaciones ------------------
 
 
@@ -95,17 +100,38 @@ def gestionar_automatizacion():
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
-            id_auto = int(input("ID de la automatización a activar: "))
-            AutomatizacionDAO.activar_modo(id_auto)
-            print("Modo activado/desactivado según estado actual.")
+            # Activar o desactivar una automatización existente
+            id_auto = int(
+                input("ID de la automatización a activar/desactivar: "))
+            if AutomatizacionDAO.activar_modo(id_auto):
+                print("Modo activado/desactivado según estado actual.\n")
+                # Mostrar la lista completa después de cambiar el estado
+                autos = AutomatizacionDAO.obtener_todos()
+                mostrar_automatizaciones(autos)
+            else:
+                print("No se encontró la automatización con ese ID.\n")
+
         elif opcion == "2":
+            # Listar todas las automatizaciones
             autos = AutomatizacionDAO.obtener_todos()
-            for a in autos:
-                mostrar_atributos(a)
+            mostrar_automatizaciones(autos)
+
         elif opcion == "3":
+            # Agregar nueva automatización
+            nombre = input("Nombre de la automatización: ")
+            funcionalidad = input("Funcionalidad: ")
+            estado = input("Estado inicial (True/False): ").lower() == "true"
+            nueva_auto = AutomatizacionDAO.insertar(
+                nombre, funcionalidad, estado)
+            print("Automatización agregada:")
+            mostrar_automatizaciones([nueva_auto])
+
+        elif opcion == "4":
             break
+
         else:
-            print("Opción incorrecta.")
+            print("Opción incorrecta.\n")
+
 
 # ------------------ Gestión Usuarios ------------------
 
