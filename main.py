@@ -3,11 +3,11 @@ from dominio.dispositivo import Dispositivo
 from dominio.automatizacion import Automatizacion
 
 from dao.usuario_dao import UsuarioDAO
-<<<<<<< HEAD
+
 # from dao.dispositivo_dao import DispositivoDAO
-=======
+
 from dao.dispositivo_dao import DispositivoDAO
->>>>>>> main
+
 from dao.automatizacion_dao import AutomatizacionDAO
 
 from utils.utilidades import mostrar_atributos, mostrar_dispositivos, mostrar_automatizaciones

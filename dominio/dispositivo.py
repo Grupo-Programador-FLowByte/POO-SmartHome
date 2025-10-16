@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 """
 Tareas de Franco
 
@@ -62,8 +62,6 @@ Resultado esperado:
 
 from usuario import Usuario
 
-=======
->>>>>>> main
 class Dispositivo:
     def __init__(self, id_dispositivo, nombre, tipo, estado):
         self.__id_dispositivo = id_dispositivo

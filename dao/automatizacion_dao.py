@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from dominio.automatizacion import Automatizacion
 
 class AutomatizacionDAO:
@@ -36,7 +35,7 @@ class AutomatizacionDAO:
             AutomatizacionDAO.automatizaciones.remove(auto)
             return True
         return False
-=======
+
 from conn.conexion import obtener_conexion, cerrar_conexion
 from dominio.automatizacion import Automatizacion
 
@@ -142,5 +141,5 @@ class AutomatizacionDAO:
 
 
 
->>>>>>> main
+
 

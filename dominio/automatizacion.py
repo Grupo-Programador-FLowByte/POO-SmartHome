@@ -81,16 +81,15 @@ class Automatizacion:
         """Cambia el estado de la automatización."""
         self.estado = not self.estado
 
-<<<<<<< HEAD
     def reglas_de_automatizacion(self):
         """Devuelve una descripción de las reglas de la automatización."""
         return f"Reglas de {self.nombre}: {self.funcionalidad}"
     
 
-=======
+
     def __str__(self):
         return (f"Automatizacion:\n"
                 f"  {self.nombre} ({self.id_automatizacion})\n"
                 f"  Funcionalidad: {self.funcionalidad}\n"
                 f"  Estado: {'Activo' if self.estado else 'Inactivo'}\n")
->>>>>>> main
+
