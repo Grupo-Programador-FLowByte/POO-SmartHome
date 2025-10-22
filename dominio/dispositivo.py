@@ -60,7 +60,6 @@ Resultado esperado:
 - Luego se puede reemplazar la lista temporal por conexión a MySQL para persistencia.
 """
 
-from usuario import Usuario
 
 class Dispositivo:
     def __init__(self, id_dispositivo, nombre, tipo, estado):

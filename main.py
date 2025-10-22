@@ -4,7 +4,7 @@ from dominio.automatizacion import Automatizacion
 
 from dao.usuario_dao import UsuarioDAO
 
-# from dao.dispositivo_dao import DispositivoDAO
+from dao.dispositivo_dao import DispositivoDAO
 
 from dao.dispositivo_dao import DispositivoDAO
 
