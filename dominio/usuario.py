@@ -1,19 +1,23 @@
 class Usuario:
     def __init__(self, id_usuario, nombre, usuario, clave, rol):
         self.__id_usuario = id_usuario
-        self.nombre = nombre
+        self.__nombre = nombre
         self.__usuario = usuario
         self.__clave = clave
-        self.rol = rol
+        self.__rol = rol
 
     # ------------------- Getters y Setters -------------------
     @property
     def id_usuario(self):
         return self.__id_usuario
 
-    @id_usuario.setter
-    def id_usuario(self, id_usuario):
-        self.__id_usuario = id_usuario
+    @property
+    def nombre(self):
+        return self.__nombre
+    
+    @nombre.setter
+    def nombre(self, nombre):
+        self.__nombre = nombre
 
     @property
     def usuario(self):
@@ -30,6 +34,14 @@ class Usuario:
     @clave.setter
     def clave(self, clave):
         self.__clave = clave
+
+    @property
+    def rol (self):
+        return self.__rol    
+    
+    @rol.setter
+    def rol(self, rol):
+        self.__rol = rol
 
     # ------------------- Métodos de instancia -------------------
     def cambiar_rol(self, nuevo_rol: str):
