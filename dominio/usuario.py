@@ -36,7 +36,7 @@ class Usuario:
         self.__clave = clave
 
     @property
-    def rol (self):
+    def rol(self):
         return self.__rol    
     
     @rol.setter
@@ -49,8 +49,8 @@ class Usuario:
         Cambia el rol del usuario a 'admin' o 'estandar'.
         """
         if nuevo_rol.lower() in ["admin", "estandar"]:
-            self.rol = nuevo_rol.lower()
-            print(f"Rol actualizado a: {self.rol.upper()}")
+            self.__rol = nuevo_rol.lower()
+            print(f"Rol actualizado a: {self.__rol.upper()}")
         else:
             print("Rol inválido. Debe ser 'admin' o 'estandar'.")
 
@@ -66,9 +66,9 @@ class Usuario:
         """
         return {
             "id_usuario": self.__id_usuario,
-            "nombre": self.nombre,
+            "nombre": self.__nombre,
             "usuario": self.__usuario,
-            "rol": self.rol
+            "rol": self.__rol
         }
 
 
