@@ -9,6 +9,9 @@ class AutomatizacionDAO:
         conexion = obtener_conexion()
         if conexion is None:
             return None
+        
+        cursor = None
+
         try:
             cursor = conexion.cursor()
             query = """
@@ -23,7 +26,7 @@ class AutomatizacionDAO:
             print("Error al insertar automatización:", e)
             return None
         finally:
-            cerrar_conexion(conexion)
+            cerrar_conexion(conexion,cursor)
 
     @staticmethod
     def obtener_todos():
@@ -31,6 +34,9 @@ class AutomatizacionDAO:
         automatizaciones = []
         if conexion is None:
             return automatizaciones
+        
+        cursor = None
+
         try:
             cursor = conexion.cursor(dictionary=True)
             cursor.execute("SELECT * FROM automatizaciones")
@@ -47,13 +53,16 @@ class AutomatizacionDAO:
             print("Error al obtener automatizaciones:", e)
             return automatizaciones
         finally:
-            cerrar_conexion(conexion)
+            cerrar_conexion(conexion,cursor)
 
     @staticmethod
     def obtener_por_id(id_automatizacion):
         conexion = obtener_conexion()
         if conexion is None:
             return None
+        
+        cursor = None
+
         try:
             cursor = conexion.cursor(dictionary=True)
             cursor.execute(
@@ -72,7 +81,7 @@ class AutomatizacionDAO:
             print("Error al obtener automatización por ID:", e)
             return None
         finally:
-            cerrar_conexion(conexion)
+            cerrar_conexion(conexion,cursor)
 
     @staticmethod
     def activar_modo(id_automatizacion):
@@ -87,6 +96,9 @@ class AutomatizacionDAO:
         conexion = obtener_conexion()
         if conexion is None:
             return False
+        
+        cursor = None 
+
         try:
             cursor = conexion.cursor()
             cursor.execute(
@@ -99,7 +111,7 @@ class AutomatizacionDAO:
             print("Error al activar/desactivar automatización:", e)
             return False
         finally:
-            cerrar_conexion(conexion)
+            cerrar_conexion(conexion,cursor)
 
 
 

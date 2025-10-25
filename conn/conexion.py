@@ -26,9 +26,11 @@ def obtener_conexion():
         return None
 
 
-def cerrar_conexion(conexion):
+def cerrar_conexion(conexion,cursor= None):
     """
     Cierra la conexión a MySQL si está abierta.
     """
+    if cursor:
+        cursor.close() 
     if conexion and conexion.is_connected():
         conexion.close()

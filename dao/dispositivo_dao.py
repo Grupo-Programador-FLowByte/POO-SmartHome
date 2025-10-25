@@ -9,6 +9,8 @@ class DispositivoDAO:
         conexion = obtener_conexion()
         if conexion is None:
             return None
+        
+        cursor = None
 
         try:
             cursor = conexion.cursor()
@@ -24,7 +26,7 @@ class DispositivoDAO:
             print("Error al insertar dispositivo:", e)
             return None
         finally:
-            cerrar_conexion(conexion)
+            cerrar_conexion(conexion,cursor) 
 
     @staticmethod
     def obtener_todos():
@@ -32,6 +34,8 @@ class DispositivoDAO:
         dispositivos = []
         if conexion is None:
             return dispositivos
+        
+        cursor = None
 
         try:
             cursor = conexion.cursor(dictionary=True)
@@ -49,13 +53,15 @@ class DispositivoDAO:
             print("Error al obtener dispositivos:", e)
             return dispositivos
         finally:
-            cerrar_conexion(conexion)
+            cerrar_conexion(conexion,cursor)
 
     @staticmethod
     def obtener_por_id(id_dispositivo):
         conexion = obtener_conexion()
         if conexion is None:
             return None
+        
+        cursor = None
 
         try:
             cursor = conexion.cursor(dictionary=True)
@@ -74,13 +80,15 @@ class DispositivoDAO:
             print("Error al obtener dispositivo por ID:", e)
             return None
         finally:
-            cerrar_conexion(conexion)
+            cerrar_conexion(conexion,cursor)
 
     @staticmethod
     def eliminar(id_dispositivo):
         conexion = obtener_conexion()
         if conexion is None:
             return False
+        
+        cursor = None
 
         try:
             cursor = conexion.cursor()
@@ -92,4 +100,4 @@ class DispositivoDAO:
             print("Error al eliminar dispositivo:", e)
             return False
         finally:
-            cerrar_conexion(conexion)
+            cerrar_conexion(conexion,cursor)

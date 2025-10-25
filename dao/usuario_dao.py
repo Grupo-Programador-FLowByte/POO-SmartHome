@@ -16,6 +16,7 @@ class UsuarioDAO:
         cursor.execute(sql, valores)
         conexion.commit()
         id_usuario = cursor.lastrowid
+        cursor.close()
         conexion.close()
         return Usuario(id_usuario, nombre, usuario, clave, rol)
 
@@ -28,6 +29,7 @@ class UsuarioDAO:
         cursor = conexion.cursor(dictionary=True)
         cursor.execute("SELECT * FROM usuarios")
         resultados = cursor.fetchall()
+        cursor.close()
         conexion.close()
         return [Usuario(r['id_usuario'], r['nombre'], r['usuario'], r['clave'], r['rol']) for r in resultados]
 
@@ -41,6 +43,7 @@ class UsuarioDAO:
         sql = "SELECT * FROM usuarios WHERE usuario = %s"
         cursor.execute(sql, (usuario,))
         resultado = cursor.fetchone()
+        cursor.close()
         conexion.close()
         if resultado:
             return Usuario(resultado['id_usuario'], resultado['nombre'], resultado['usuario'], resultado['clave'], resultado['rol'])
@@ -67,5 +70,6 @@ class UsuarioDAO:
         cursor.execute(sql, (nuevo_rol, id_usuario))
         conexion.commit()
         actualizado = cursor.rowcount > 0
+        cursor.close()
         conexion.close()
         return actualizado
