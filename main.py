@@ -176,10 +176,8 @@ def gestion_estandar(usuario_obj):
             print("Activando modo ahorro de energía para tus dispositivos...")
             # Aquí podés agregar lógica para activar modo ahorro
         elif opcion == "3":
-            dispositivos = DispositivoDAO.obtener_por_usuario(
-                usuario_obj.get_id_usuario())
-            for d in dispositivos:
-                mostrar_atributos(d)
+            dispositivos = DispositivoDAO.obtener_todos()
+            mostrar_dispositivos(dispositivos)
         elif opcion == "4":
             break
         else:
