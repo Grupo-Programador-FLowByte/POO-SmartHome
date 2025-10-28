@@ -1,8 +1,10 @@
+from dao.Interfaces.i_usuario_dao import IUsuarioDAO
 from conn.conexion import obtener_conexion, cerrar_conexion
 from dominio.usuario import Usuario, Rol
 
 
-class UsuarioDAO:
+class UsuarioDAO(IUsuarioDAO):
+
 
     @staticmethod
     def insertar(nombre: str, usuario: str, clave: str, rol: Rol) -> Usuario | None:

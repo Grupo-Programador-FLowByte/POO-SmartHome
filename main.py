@@ -198,7 +198,7 @@ def menu():
             usuario = input("Usuario: ")
             clave = input("Contraseña: ")
             rol_input = input("Seleccione rol (1-Admin, 2-Estándar): ")
-            rol = Rol.from_input(rol_input)  # <-- Convertir a Enum
+            rol = Rol.from_input(rol_input)  
             usuario_obj = UsuarioDAO.insertar(nombre, usuario, clave, rol)
 
             if usuario_obj:
