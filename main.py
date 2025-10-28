@@ -1,10 +1,8 @@
-from dominio.usuario import Usuario
-from dominio.dispositivo import Dispositivo
-from dominio.automatizacion import Automatizacion
-
 from dao.usuario_dao import UsuarioDAO
 from dao.dispositivo_dao import DispositivoDAO
 from dao.automatizacion_dao import AutomatizacionDAO
+
+from dominio.usuario import Rol
 
 from utils.utilidades import mostrar_atributos, mostrar_dispositivos, mostrar_automatizaciones
 
@@ -149,20 +147,18 @@ def gestion_administrador():
             try:
                 id_usuario = int(
                     input("Ingrese ID del usuario para cambiar rol: "))
-                nuevo_rol = input("Nuevo rol (admin/estandar): ").lower()
-
-                if nuevo_rol not in ["admin", "estandar"]:
-                    print(
-                        "Error: el rol debe ser 'admin' o 'estandar'. No se realizó ningún cambio.")
-                    continue
+                rol_input = input("Seleccione rol (1-Admin, 2-Estándar): ")
+                nuevo_rol = Rol.from_input(rol_input)
 
                 if UsuarioDAO.actualizar_rol(id_usuario, nuevo_rol):
-                    print("Rol actualizado correctamente.")
+                    print(
+                        f"Rol actualizado correctamente a {nuevo_rol.value.upper()}.")
                 else:
                     print("No se encontró el usuario con ese ID.")
 
             except ValueError:
                 print("Error: el ID debe ser un número.")
+
         elif opcion == "4":
             break
         else:
@@ -201,22 +197,30 @@ def menu():
             nombre = input("Nombre completo: ")
             usuario = input("Usuario: ")
             clave = input("Contraseña: ")
-            rol = "admin" if input(
-                "Rol admin? (s/n): ").lower() == "s" else "estandar"
-            id_usuario = UsuarioDAO.insertar(nombre, usuario, clave, rol)
-            print(f"Usuario '{usuario}' registrado con ID {id_usuario}.")
+            rol_input = input("Seleccione rol (1-Admin, 2-Estándar): ")
+            rol = Rol.from_input(rol_input)  # <-- Convertir a Enum
+            usuario_obj = UsuarioDAO.insertar(nombre, usuario, clave, rol)
+
+            if usuario_obj:
+                print(
+                    f"Usuario '{usuario}' registrado con rol {rol.value.upper()}.")
+            else:
+                print("Error al registrar el usuario.")
+
         elif opcion == "2":
             usuario = input("Usuario: ")
             clave = input("Contraseña: ")
             usuario_obj = UsuarioDAO.iniciar_sesion(usuario, clave)
             if usuario_obj:
-                print(f"Bienvenido {usuario_obj.nombre} ({usuario_obj.rol})")
-                if usuario_obj.rol == "admin":
+                print(
+                    f"Bienvenido {usuario_obj.nombre} ({usuario_obj.rol.value})")
+                if usuario_obj.rol == Rol.ADMIN:
                     gestion_administrador()
                 else:
                     gestion_estandar(usuario_obj)
             else:
                 print("Usuario o contraseña incorrectos.")
+
         elif opcion == "3":
             break
         else:

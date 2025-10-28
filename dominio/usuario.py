@@ -1,23 +1,40 @@
+from enum import Enum
+
+
+class Rol(Enum):
+    ADMIN = "admin"
+    ESTANDAR = "estandar"
+
+    @staticmethod
+    def from_input(opcion: str):
+        """
+        Convierte la opción del usuario en un Rol.
+        1 => ADMIN
+        2 => ESTANDAR
+        Cualquier otro valor => ESTANDAR
+        """
+        if opcion == "1":
+            return Rol.ADMIN
+        else:
+            return Rol.ESTANDAR
+
+
 class Usuario:
     def __init__(self, id_usuario, nombre, usuario, clave, rol):
         self.__id_usuario = id_usuario
-        self.__nombre = nombre
+        self.nombre = nombre
         self.__usuario = usuario
         self.__clave = clave
-        self.__rol = rol
+        self.rol = rol
 
     # ------------------- Getters y Setters -------------------
     @property
     def id_usuario(self):
         return self.__id_usuario
 
-    @property
-    def nombre(self):
-        return self.__nombre
-    
-    @nombre.setter
-    def nombre(self, nombre):
-        self.__nombre = nombre
+    @id_usuario.setter
+    def id_usuario(self, id_usuario):
+        self.__id_usuario = id_usuario
 
     @property
     def usuario(self):
@@ -35,40 +52,24 @@ class Usuario:
     def clave(self, clave):
         self.__clave = clave
 
-    @property
-    def rol(self):
-        return self.__rol    
-    
-    @rol.setter
-    def rol(self, rol):
-        self.__rol = rol
-
     # ------------------- Métodos de instancia -------------------
-    def cambiar_rol(self, nuevo_rol: str):
-        """
-        Cambia el rol del usuario a 'admin' o 'estandar'.
-        """
-        if nuevo_rol.lower() in ["admin", "estandar"]:
-            self.__rol = nuevo_rol.lower()
-            print(f"Rol actualizado a: {self.__rol.upper()}")
+
+    def cambiar_rol(self, nuevo_rol: Rol):
+        if isinstance(nuevo_rol, Rol):
+            self.rol = nuevo_rol
+            print(f"Rol actualizado a: {self.rol.value.upper()}")
         else:
-            print("Rol inválido. Debe ser 'admin' o 'estandar'.")
+            print("Rol inválido. Se mantiene el rol actual.")
 
     def verificar_credenciales(self, usuario_input, clave_input) -> bool:
-        """
-        Verifica si las credenciales coinciden con este usuario.
-        """
         return self.__usuario == usuario_input and self.__clave == clave_input
 
     def mostrar_info(self):
-        """
-        Devuelve un diccionario con la información del usuario (sin la clave).
-        """
         return {
             "id_usuario": self.__id_usuario,
-            "nombre": self.__nombre,
+            "nombre": self.nombre,
             "usuario": self.__usuario,
-            "rol": self.__rol
+            "rol": self.rol.value
         }
 
 

@@ -1,16 +1,35 @@
+from enum import Enum
+
+
 def mostrar_atributos(objeto, claves=None):
     """
-    Imprime los atributos de un objeto o diccionario.
-    Si se pasa 'claves', solo imprime esas claves.
+    Imprime los atributos de un objeto o diccionario de forma legible.
+    Maneja atributos privados y Enum.
     """
     if isinstance(objeto, dict):
         items = objeto.items()
     else:
-        items = vars(objeto).items()  # toma solo atributos de instancia
+        # Tomamos los atributos del objeto con vars y propiedades
+        items = {}
+        for attr in dir(objeto):
+            if attr.startswith("_") and not attr.startswith("__class__") and not attr.startswith("__module__"):
+                # ignoramos métodos y atributos especiales
+                continue
+            if callable(getattr(objeto, attr)):
+                continue
+            valor = getattr(objeto, attr)
+            # Convertir Enum a su valor
+            if isinstance(valor, Enum):
+                valor = valor.value
+            items[attr] = valor
+
+        items = items.items()
 
     for k, v in items:
         if not claves or k in claves:
             print(f"{k}: {v}")
+    print("-" * 40)
+
 # utils/utilidades.py
 
 
